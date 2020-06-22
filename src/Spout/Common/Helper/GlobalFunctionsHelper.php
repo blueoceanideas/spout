@@ -16,11 +16,13 @@ class GlobalFunctionsHelper
      *
      * @param string $fileName
      * @param string $mode
+     * @param bool false
+     * @param resource $context @see https://www.php.net/stream_context_create
      * @return resource|bool
      */
-    public function fopen($fileName, $mode)
+    public function fopen($fileName, $mode, $use_include_path = false, $context = null)
     {
-        return \fopen($fileName, $mode);
+        return \fopen($fileName, $mode, $use_include_path, $context);
     }
 
     /**

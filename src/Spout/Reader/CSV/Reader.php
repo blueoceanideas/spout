@@ -23,6 +23,26 @@ class Reader extends ReaderAbstract
     protected $originalAutoDetectLineEndings;
 
     /**
+     * @var resource|null
+     */
+    protected $streamContext;
+
+    /**
+     * Set the stream context.
+     *
+     * @see https://www.php.net/stream_context_create
+     * @param resource $context A stream context resource returned by the PHP function stream_context_create
+     *
+     * @return Reader
+     */
+    public function setStreamContext($context)
+    {
+        $this->streamContext = $context;
+
+        return $this;
+    }
+
+    /**
      * Sets the field delimiter for the CSV.
      * Needs to be called before opening the reader.
      *
@@ -87,7 +107,7 @@ class Reader extends ReaderAbstract
         $this->originalAutoDetectLineEndings = \ini_get('auto_detect_line_endings');
         \ini_set('auto_detect_line_endings', '1');
 
-        $this->filePointer = $this->globalFunctionsHelper->fopen($filePath, 'r');
+        $this->filePointer = $this->globalFunctionsHelper->fopen($filePath, 'r', false, $this->streamContext);
         if (!$this->filePointer) {
             throw new IOException("Could not open file $filePath for reading.");
         }
